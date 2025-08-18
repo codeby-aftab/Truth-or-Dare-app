@@ -86,9 +86,20 @@ const GameScreen: React.FC<GameScreenProps> = ({ players, mode, onGameEnd, updat
         const spinCycles = Math.floor(Math.random() * 3) + 3; // 3 to 5 full spins
         const targetIndex = Math.floor(Math.random() * players.length);
         const anglePerPlayer = 360 / players.length;
-        const targetRotation = spinCycles * 360 - (targetIndex * anglePerPlayer);
 
-        setRotation(current => current + targetRotation);
+        // Correctly calculate the rotation to ensure the arrow points at the targetIndex
+        const currentAngle = rotation % 360;
+        const targetAngle = targetIndex * anglePerPlayer;
+
+        // Calculate the shortest clockwise distance to the target
+        let angleDifference = targetAngle - currentAngle;
+        if (angleDifference < 0) {
+            angleDifference += 360;
+        }
+
+        const totalRotation = spinCycles * 360 + angleDifference;
+
+        setRotation(current => current + totalRotation);
         
         setTimeout(() => {
             setIsSpinning(false);

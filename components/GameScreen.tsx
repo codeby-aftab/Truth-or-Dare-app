@@ -11,18 +11,20 @@ interface GameScreenProps {
   rounds: number;
 }
 
-const BottleSVG: React.FC = () => (
-    <svg viewBox="0 0 100 300" className="w-24 h-72 drop-shadow-[0_0_20px_rgba(236,72,153,0.8)]">
+const ArrowSVG: React.FC = () => (
+    <svg viewBox="-50 -50 100 100" className="w-20 h-40 drop-shadow-[0_0_20px_rgba(236,72,153,0.8)]">
         <defs>
             <linearGradient id="bottleFill" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" style={{stopColor: '#ec4899', stopOpacity: 1}} />
                 <stop offset="100%" style={{stopColor: '#f9a8d4', stopOpacity: 1}} />
             </linearGradient>
         </defs>
-        <path d="M30,300 C20,250 20,150 30,120 Q30,100 50,100 Q70,100 70,120 C80,150 80,250 70,300 Z" fill="url(#bottleFill)" />
-        <path d="M40,100 L40,30 Q40,10 50,10 L50,10 Q60,10 60,30 L60,100 Z" fill="url(#bottleFill)" />
-        <rect x="35" y="0" width="30" height="15" rx="5" fill="#a855f7" />
-        <path d="M50,290 L85,250 L50,265 L15,250 Z" fill="#fef08a"/>
+        <path 
+          d="M0,-50 L25,-10 L10,-10 L10,50 L-10,50 L-10,-10 L-25,-10 Z" 
+          fill="url(#bottleFill)"
+          stroke="white"
+          strokeWidth="2"
+        />
     </svg>
 );
 
@@ -84,7 +86,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ players, mode, onGameEnd, updat
         const spinCycles = Math.floor(Math.random() * 3) + 3; // 3 to 5 full spins
         const targetIndex = Math.floor(Math.random() * players.length);
         const anglePerPlayer = 360 / players.length;
-        const targetRotation = spinCycles * 360 + (targetIndex * anglePerPlayer) + (anglePerPlayer / 2);
+        const targetRotation = spinCycles * 360 - (targetIndex * anglePerPlayer);
 
         setRotation(current => current + targetRotation);
         
@@ -150,7 +152,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ players, mode, onGameEnd, updat
         return (
             <div className="flex flex-col items-center justify-center text-center">
                 <div className="mb-20 h-10">
-                    {gameState === 'IDLE' && <h2 className="font-display text-4xl text-white">Click the bottle to spin!</h2>}
+                    {gameState === 'IDLE' && <h2 className="font-display text-4xl text-white">Click the arrow to spin!</h2>}
                     {gameState === 'SPINNING' && <h2 className="font-display text-4xl text-white animate-pulse">Spinning...</h2>}
                     {gameState === 'CHOOSING' && currentPlayer && <h2 className="font-display text-4xl text-pink-400">{currentPlayer.name}, your turn!</h2>}
                 </div>
@@ -161,9 +163,9 @@ const GameScreen: React.FC<GameScreenProps> = ({ players, mode, onGameEnd, updat
                         style={{ transform: `rotate(${rotation}deg)` }}
                         onClick={handleSpin}
                         role="button"
-                        aria-label="Spin the bottle"
+                        aria-label="Spin the arrow"
                     >
-                        <BottleSVG />
+                        <ArrowSVG />
                     </div>
                 </div>
 
